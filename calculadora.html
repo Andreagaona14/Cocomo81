@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora COCOMO 81 Intermedio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="bg-blue-900 text-white p-6 rounded-lg shadow-md mb-8">
+            <h1 class="text-3xl font-bold text-center">Calculadora COCOMO 81 Intermedio</h1>
+            <p class="text-center text-gray-200 mt-2">Estimación de esfuerzo en proyectos de software</p>
+        </header>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-blue-900 border-b-2 border-blue-500 pb-2 mb-4">Datos Básicos del Proyecto</h3>
+                <div class="mb-4">
+                    <label for="projectType" class="block font-medium mb-2">Tipo de Proyecto:</label>
+                    <select id="projectType" class="w-full p-2 border border-gray-300 rounded-md">
+                        <option value="organic">Orgánico (pequeños equipos con buena experiencia)</option>
+                        <option value="semidetached">Semi-acoplado (equipos y proyectos medianos)</option>
+                        <option value="embedded">Embebido/Integrado (proyectos complejos)</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="kloc" class="block font-medium mb-2">Tamaño estimado (KLOC):</label>
+                    <input type="number" id="kloc" min="0" step="0.1" class="w-full p-2 border border-gray-300 rounded-md" required>
+                    <p class="text-sm text-gray-500 mt-1">Miles de líneas de código fuente</p>
+                </div>
+                <div class="mb-4">
+                    <label for="salary" class="block font-medium mb-2">Sueldo mensual por programador ($):</label>
+                    <input type="number" id="salary" min="0" class="w-full p-2 border border-gray-300 rounded-md" required>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-blue-900 border-b-2 border-blue-500 pb-2 mb-4">Multiplicadores de Costo</h3>
+                <p class="mb-4 text-gray-600">Seleccione el nivel de cada factor que afecta el esfuerzo del proyecto:</p>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Atributos del producto -->
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="font-medium text-blue-800 mb-2">Atributos del Producto</h4>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Fiabilidad requerida (RELY):</label>
+                            <select id="rely" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="0.75">Muy bajo - 0.75</option>
+                                <option value="0.88">Bajo - 0.88</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.15">Alto - 1.15</option>
+                                <option value="1.40">Muy alto - 1.40</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Tamaño de base de datos (DATA):</label>
+                            <select id="data" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="0.94">Bajo - 0.94</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.08">Alto - 1.08</option>
+                                <option value="1.16">Muy alto - 1.16</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Complejidad del producto (CPLX):</label>
+                            <select id="cplx" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="0.70">Muy bajo - 0.70</option>
+                                <option value="0.85">Bajo - 0.85</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.15">Alto - 1.15</option>
+                                <option value="1.30">Muy alto - 1.30</option>
+                                <option value="1.65">Extra alto - 1.65</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Atributos del hardware -->
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="font-medium text-blue-800 mb-2">Atributos del Hardware</h4>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Restricciones de tiempo de ejecución (TIME):</label>
+                            <select id="time" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.11">Alto - 1.11</option>
+                                <option value="1.30">Muy alto - 1.30</option>
+                                <option value="1.66">Extra alto - 1.66</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Restricciones de memoria (STOR):</label>
+                            <select id="stor" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.06">Alto - 1.06</option>
+                                <option value="1.21">Muy alto - 1.21</option>
+                                <option value="1.56">Extra alto - 1.56</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Volatilidad de la máquina virtual (VIRT):</label>
+                            <select id="virt" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="0.87">Bajo - 0.87</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.15">Alto - 1.15</option>
+                                <option value="1.30">Muy alto - 1.30</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Tiempo de respuesta (TURN):</label>
+                            <select id="turn" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="0.87">Bajo - 0.87</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.07">Alto - 1.07</option>
+                                <option value="1.15">Muy alto - 1.15</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Atributos del personal -->
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="font-medium text-blue-800 mb-2">Atributos del Personal</h4>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Capacidad de analistas (ACAP):</label>
+                            <select id="acap" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.46">Muy bajo - 1.46</option>
+                                <option value="1.19">Bajo - 1.19</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.86">Alto - 0.86</option>
+                                <option value="0.71">Muy alto - 0.71</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Capacidad de programadores (PCAP):</label>
+                            <select id="pcap" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.42">Muy bajo - 1.42</option>
+                                <option value="1.17">Bajo - 1.17</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.86">Alto - 0.86</option>
+                                <option value="0.70">Muy alto - 0.70</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Experiencia en aplicaciones (AEXP):</label>
+                            <select id="aexp" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.29">Muy bajo - 1.29</option>
+                                <option value="1.13">Bajo - 1.13</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.91">Alto - 0.91</option>
+                                <option value="0.82">Muy alto - 0.82</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Experiencia en la plataforma (PEXP):</label>
+                            <select id="pexp" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.21">Muy bajo - 1.21</option>
+                                <option value="1.10">Bajo - 1.10</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.90">Alto - 0.90</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Experiencia en lenguajes y herramientas (LTEX):</label>
+                            <select id="ltex" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.14">Muy bajo - 1.14</option>
+                                <option value="1.07">Bajo - 1.07</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.95">Alto - 0.95</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Atributos del proyecto -->
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="font-medium text-blue-800 mb-2">Atributos del Proyecto</h4>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Uso de herramientas de software (TOOL):</label>
+                            <select id="tool" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.24">Muy bajo - 1.24</option>
+                                <option value="1.10">Bajo - 1.10</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.91">Alto - 0.91</option>
+                                <option value="0.83">Muy alto - 0.83</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Desarrollo multisitio (SITE):</label>
+                            <select id="site" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.22">Muy bajo - 1.22</option>
+                                <option value="1.09">Bajo - 1.09</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="0.93">Alto - 0.93</option>
+                                <option value="0.86">Muy alto - 0.86</option>
+                                <option value="0.80">Extra alto - 0.80</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="block font-medium mb-1">Restricciones de calendario (SCED):</label>
+                            <select id="sced" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="1.23">Muy bajo - 1.23</option>
+                                <option value="1.08">Bajo - 1.08</option>
+                                <option value="1.00" selected>Nominal - 1.00</option>
+                                <option value="1.04">Alto - 1.04</option>
+                                <option value="1.10">Muy alto - 1.10</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-blue-900 border-b-2 border-blue-500 pb-2 mb-4">Opción de Cálculo</h3>
+                
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="bg-gray-50 p-4 rounded-md flex-1">
+                        <div class="mb-2">
+                            <input type="radio" id="calcProgrammers" name="calcOption" value="programmers" checked class="mr-2">
+                            <label for="calcProgrammers" class="font-medium">Calcular duración con programadores</label>
+                        </div>
+                        <div id="programmersSection" class="mt-3">
+                            <label for="programmers" class="block font-medium mb-2">Número de programadores:</label>
+                            <input type="number" id="programmers" min="1" class="w-full p-2 border border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-md flex-1">
+                        <div class="mb-2">
+                            <input type="radio" id="calcDuration" name="calcOption" value="duration" class="mr-2">
+                            <label for="calcDuration" class="font-medium">Calcular programadores con duración</label>
+                        </div>
+                        <div id="durationSection" class="mt-3 hidden">
+                            <label for="duration" class="block font-medium mb-2">Duración deseada (meses):</label>
+                            <input type="number" id="duration" min="1" class="w-full p-2 border border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="calculate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-200">
+                Calcular Estimación
+            </button>
+        </div>
+        
+        <div id="results" class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 hidden">
+            <h3 class="text-xl font-semibold text-center text-blue-900 mb-4">Resultados de la Estimación</h3>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-4 rounded-md shadow">
+                    <h4 class="text-lg font-medium text-blue-700 mb-2">Esfuerzo</h4>
+                    <p class="text-xl font-bold" id="effortResult">-</p>
+                    <p class="text-gray-600">persona-meses</p>
+                </div>
+                
+                <div class="bg-white p-4 rounded-md shadow">
+                    <h4 class="text-lg font-medium text-blue-700 mb-2">Tiempo de Desarrollo</h4>
+                    <p class="text-xl font-bold" id="timeResult">-</p>
+                    <p class="text-gray-600">meses</p>
+                </div>
+                
+                <div class="bg-white p-4 rounded-md shadow">
+                    <h4 class="text-lg font-medium text-blue-700 mb-2">Personas Necesarias</h4>
+                    <p class="text-xl font-bold" id="peopleResult">-</p>
+                    <p class="text-gray-600">promedio</p>
+                </div>
+                
+                <div class="bg-white p-4 rounded-md shadow">
+                    <h4 class="text-lg font-medium text-blue-700 mb-2">Costo Total</h4>
+                    <p class="text-xl font-bold" id="costResult">-</p>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-blue-100 border-l-4 border-blue-500 p-4 rounded">
+                <h4 class="font-medium text-blue-800 mb-2">Interpretación:</h4>
+                <p id="interpretation" class="text-gray-700"></p>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold text-blue-900 border-b-2 border-blue-500 pb-2 mb-4">Información del Modelo COCOMO 81 Intermedio</h3>
+            <p class="mb-3">El modelo COCOMO (COnstructive COst MOdel) desarrollado por Barry Boehm es un modelo de estimación de costos de software que se utiliza para predecir el esfuerzo, tiempo y costo del desarrollo de software.</p>
+            <p class="mb-3">El modelo intermedio añade a la estimación básica un conjunto de 15 factores de costo que tienen un impacto en el esfuerzo del proyecto.</p>
+            <p>Los factores se dividen en cuatro categorías: atributos del producto, hardware, personal y proyecto. Cada factor puede afectar el esfuerzo multiplicando el resultado básico por un valor que va desde 0.70 hasta 1.66 dependiendo de su influencia.</p>
+        </div>
+        
+        <footer class="mt-8 text-center text-gray-500 text-sm">
+            <p>Calculadora COCOMO 81 Andrea & Sofia - Abril 2025</p>
+        </footer>
+    </div>
+    
+    <script src="./script.js"></script>
+</body>
+</html>
