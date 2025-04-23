@@ -74,7 +74,7 @@ const COCOMO_PARAMETERS = {
         }
         
         // Calcular el costo total considerando incremento anual
-        cost = calculateTotalCost(adjustedEffort, salary);
+        cost = calculateTotalCost(time, salary);
         
         // Mostrar resultados
         displayResults(adjustedEffort.toFixed(2), time.toFixed(2), people.toFixed(1), cost, nominalTime.toFixed(2));
@@ -99,27 +99,31 @@ const COCOMO_PARAMETERS = {
     
     // Calcular el costo total considerando incremento salarial anual
     function calculateTotalCost(effort, monthlySalary) {
-        const ANNUAL_INCREASE = 0.05; // 5% de incremento anual
+        const ANNUAL_INCREASE = 0.05;
         const MONTHS_PER_YEAR = 12;
+
+        console.log(effort);
         
+    
         let totalCost = 0;
         let remainingEffort = effort;
         let currentYear = 0;
-        let yearlyEffort;
-        
+    
         while (remainingEffort > 0) {
-            const salaryIncrease = Math.pow(1 + ANNUAL_INCREASE, currentYear);
-            const adjustedSalary = monthlySalary * salaryIncrease;
-            
-            yearlyEffort = Math.min(remainingEffort, MONTHS_PER_YEAR);
-            totalCost += yearlyEffort * adjustedSalary;
-            
-            remainingEffort -= yearlyEffort;
+            const adjustedSalary = monthlySalary * Math.pow(1 + ANNUAL_INCREASE, currentYear);
+            const monthsThisYear = Math.min(remainingEffort, MONTHS_PER_YEAR);
+            totalCost += monthsThisYear * adjustedSalary;
+    
+            console.log(`Año ${currentYear + 1} | Meses: ${monthsThisYear} | Salario ajustado: $${adjustedSalary.toFixed(2)} | Acumulado: $${totalCost.toFixed(2)}`);
+    
+            remainingEffort -= monthsThisYear;
             currentYear++;
         }
-        
+    
         return totalCost.toFixed(2);
     }
+    
+    
     
     // Mostrar los resultados en la interfaz
     function displayResults(effort, time, people, cost, nominalTime) {
